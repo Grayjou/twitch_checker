@@ -1,0 +1,89 @@
+[build-system]
+requires = ["setuptools>=45", "wheel", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "twitch-checker"
+dynamic = ["version"]
+description = "High-level Twitch stream checker with state tracking and change detection"
+readme = "README.md"
+authors = [
+    {name = "Grayjou", email = "cgrayjou@gmail.com"},
+]
+license = {text = "MIT"}
+keywords = ["twitch", "stream", "api", "checker", "monitoring"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+]
+requires-python = ">=3.7"
+dependencies = [
+    "aiohttp>=3.8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-asyncio>=0.20.0",
+    "black>=22.0",
+    "isort>=5.0",
+    "mypy>=0.991",
+    "flake8>=4.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/Grayjou/twitch_checker"
+Documentation = "https://github.com/Grayjou/twitch_checker#readme"
+Repository = "https://github.com/Grayjou/twitch_checker"
+Issues = "https://github.com/Grayjou/twitch_checker/issues"
+Changelog = "https://github.com/Grayjou/twitch_checker/blob/main/CHANGELOG.md"
+
+[tool.setuptools_scm]
+write_to = "twitch_checker/_version.py"
+
+[tool.black]
+line-length = 88
+target-version = ['py37']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+
+[tool.mypy]
+python_version = "3.7"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
