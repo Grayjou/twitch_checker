@@ -37,7 +37,7 @@ class TwitchChecker:
         self.to_check_existence: Set[str] = set()
         self.cooldown_seconds = cooldown_seconds
         self.last_time_offline: Dict[str, datetime] = {}
-
+        self.user_ids: Dict[str, str] = {}
         if logins:
             self.logins = logins
 
@@ -80,7 +80,9 @@ class TwitchChecker:
             params = [("login", login) for login in chunk]
             data = await self.api._get("users", params)
             for user in data.get("data", []):
-                existing.add(user["login"].lower())
+                login_lower = user["login"].lower()
+                existing.add(login_lower)
+                self.user_ids[login_lower] = user["id"]  # Cache the ID
         return existing
 
     # -------------------- Live Status --------------------
@@ -199,3 +201,11 @@ class TwitchChecker:
 
     async def close(self):
         await self.api.close()
+
+    def __del__(self):
+        asyncio.create_task(self.close())
+
+
+    def get_user_id(self, login: str) -> Optional[str]:
+        """Get cached user ID for a login (must check existence first)."""
+        return self.user_ids.get(login.lower())
